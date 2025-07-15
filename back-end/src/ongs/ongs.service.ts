@@ -1,32 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class OngsService {
-
-  constructor(private prisma : PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
   async create(createOngDto: CreateOngDto) {
     return await this.prisma.ong.create({
-      data: createOngDto
+      data: createOngDto,
     });
   }
 
   findAll() {
-    return `This action returns all ongs`;
+    return this.prisma.ong.findMany({
+      include: {
+        animais: {
+          select: {
+            id: true,
+            nome: true,
+            especie: true,
+          },
+        },
+        usuarios: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ong`;
+  async findOne(id: number) {
+    const ong = await this.prisma.ong.findUnique({
+      where: { id },
+      include: {
+        animais: {
+          select: {
+            id: true,
+            nome: true,
+            especie: true,
+          },
+        },
+        usuarios: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!ong) {
+      throw new NotFoundException(`ONG com ID ${id} não encontrada.`);
+    }
+    return ong;
   }
 
-  update(id: number, updateOngDto: UpdateOngDto) {
-    return `This action updates a #${id} ong`;
+  async update(id: number, updateOngDto: UpdateOngDto) {
+    await this.findOne(id);
+
+    return await this.prisma.ong.update({
+      where: { id },
+      data: updateOngDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ong`;
+  async remove(id: number) {
+    await this.findOne(id);;
+
+    return await this.prisma.ong.delete({
+      where: { id },
+    });
   }
 }

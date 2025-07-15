@@ -19,20 +19,67 @@ let OngsService = class OngsService {
     }
     async create(createOngDto) {
         return await this.prisma.ong.create({
-            data: createOngDto
+            data: createOngDto,
         });
     }
     findAll() {
-        return `This action returns all ongs`;
+        return this.prisma.ong.findMany({
+            include: {
+                animais: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        especie: true,
+                    },
+                },
+                usuarios: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        email: true,
+                    },
+                },
+            },
+        });
     }
-    findOne(id) {
-        return `This action returns a #${id} ong`;
+    async findOne(id) {
+        const ong = await this.prisma.ong.findUnique({
+            where: { id },
+            include: {
+                animais: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        especie: true,
+                    },
+                },
+                usuarios: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        email: true,
+                    },
+                },
+            },
+        });
+        if (!ong) {
+            throw new common_1.NotFoundException(`ONG com ID ${id} não encontrada.`);
+        }
+        return ong;
     }
-    update(id, updateOngDto) {
-        return `This action updates a #${id} ong`;
+    async update(id, updateOngDto) {
+        await this.findOne(id);
+        return await this.prisma.ong.update({
+            where: { id },
+            data: updateOngDto,
+        });
     }
-    remove(id) {
-        return `This action removes a #${id} ong`;
+    async remove(id) {
+        await this.findOne(id);
+        ;
+        return await this.prisma.ong.delete({
+            where: { id },
+        });
     }
 };
 exports.OngsService = OngsService;

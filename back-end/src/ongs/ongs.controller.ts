@@ -1,7 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { OngsService } from './ongs.service';
+
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
+import { OngsService } from './ongs.service';
 
 @Controller('ongs')
 export class OngsController {

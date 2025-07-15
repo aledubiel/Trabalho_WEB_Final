@@ -14,9 +14,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OngsController = void 0;
 const common_1 = require("@nestjs/common");
-const ongs_service_1 = require("./ongs.service");
 const create_ong_dto_1 = require("./dto/create-ong.dto");
 const update_ong_dto_1 = require("./dto/update-ong.dto");
+const ongs_service_1 = require("./ongs.service");
 let OngsController = class OngsController {
     ongsService;
     constructor(ongsService) {

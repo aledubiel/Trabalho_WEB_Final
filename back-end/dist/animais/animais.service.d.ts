@@ -5,7 +5,6 @@ export declare class AnimaisService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createAnimaiDto: CreateAnimaiDto): Promise<{
-        id: number;
         especie: string;
         nome: string;
         data_nascimento: Date;
@@ -13,9 +12,13 @@ export declare class AnimaisService {
         sexo: string;
         descricao: string;
         idOng: number | null;
+        id: number;
     }>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
-        id: number;
+    findAll(): import(".prisma/client").Prisma.PrismaPromise<({
+        ong: {
+            nome: string;
+        } | null;
+    } & {
         especie: string;
         nome: string;
         data_nascimento: Date;
@@ -23,8 +26,40 @@ export declare class AnimaisService {
         sexo: string;
         descricao: string;
         idOng: number | null;
-    }[]>;
-    findOne(id: number): string;
-    update(id: number, updateAnimaiDto: UpdateAnimaiDto): string;
-    remove(id: number): string;
+        id: number;
+    })[]>;
+    findOne(id: number): Promise<{
+        ong: {
+            nome: string;
+        } | null;
+    } & {
+        especie: string;
+        nome: string;
+        data_nascimento: Date;
+        porte: string;
+        sexo: string;
+        descricao: string;
+        idOng: number | null;
+        id: number;
+    }>;
+    update(id: number, updateAnimaiDto: UpdateAnimaiDto): Promise<{
+        especie: string;
+        nome: string;
+        data_nascimento: Date;
+        porte: string;
+        sexo: string;
+        descricao: string;
+        idOng: number | null;
+        id: number;
+    }>;
+    remove(id: number): Promise<{
+        especie: string;
+        nome: string;
+        data_nascimento: Date;
+        porte: string;
+        sexo: string;
+        descricao: string;
+        idOng: number | null;
+        id: number;
+    }>;
 }

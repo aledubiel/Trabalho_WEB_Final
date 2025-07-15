@@ -1,4 +1,13 @@
 {
+  "/[id]/page": "app/[id]/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/new/page": "app/new/page.js",
+  "/ongs/[id]/page": "app/ongs/[id]/page.js",
+  "/ongs/new/page": "app/ongs/new/page.js",
+  "/ongs/page": "app/ongs/page.js",
+  "/page": "app/page.js",
+  "/usuarios/[id]/page": "app/usuarios/[id]/page.js",
+  "/usuarios/new/page": "app/usuarios/new/page.js",
+  "/usuarios/page": "app/usuarios/page.js"
 }

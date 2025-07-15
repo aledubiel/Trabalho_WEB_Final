@@ -19,20 +19,49 @@ let AnimaisService = class AnimaisService {
     }
     async create(createAnimaiDto) {
         return await this.prisma.animal.create({
-            data: createAnimaiDto
+            data: createAnimaiDto,
         });
     }
     findAll() {
-        return this.prisma.animal.findMany();
+        return this.prisma.animal.findMany({
+            include: {
+                ong: {
+                    select: {
+                        nome: true,
+                    },
+                },
+            },
+        });
     }
-    findOne(id) {
-        return `This action returns a #${id} animai`;
+    async findOne(id) {
+        const animal = await this.prisma.animal.findUnique({
+            where: { id },
+            include: {
+                ong: {
+                    select: {
+                        nome: true,
+                    },
+                },
+            },
+        });
+        if (!animal) {
+            throw new common_1.NotFoundException(`Animal com ID ${id} não encontrado.`);
+        }
+        return animal;
     }
-    update(id, updateAnimaiDto) {
-        return `This action updates a #${id} animai`;
+    async update(id, updateAnimaiDto) {
+        await this.findOne(id);
+        return await this.prisma.animal.update({
+            where: { id },
+            data: updateAnimaiDto,
+        });
     }
-    remove(id) {
-        return `This action removes a #${id} animai`;
+    async remove(id) {
+        await this.findOne(id);
+        ;
+        return await this.prisma.animal.delete({
+            where: { id },
+        });
     }
 };
 exports.AnimaisService = AnimaisService;
